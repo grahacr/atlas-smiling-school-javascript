@@ -5,7 +5,7 @@ function getQuotes() {
     method: 'GET',
     success: function(data) {
       $('.loader').removeClass('d-block');
-      $('.carousel-inner').empty();
+      $('#quoteCarousel').empty();
 
       data.forEach(function(quote, index) {
         let activeQuote = index === 0 ? 'active' : '';
@@ -24,7 +24,7 @@ function getQuotes() {
               </div>
             </div>
           </div>`;
-          $('.carousel-inner').append(quoteHTML);
+          $('#quoteCarousel').append(quoteHTML);
         });
       }
     });
@@ -37,7 +37,7 @@ function getQuotes() {
       method: 'GET',
       success: function(data) {
         $('.video-loader').removeClass('d-block');
-        $('.carousel-inner').empty();
+        $('#videoCarousel').empty();
 
         data.forEach(function(video, index) {
           let activeVideo = index === 0 ? 'active' : '';
@@ -82,7 +82,7 @@ function getQuotes() {
           </div>
         </div>
       </div>`;
-      $('.carousel-inner').append(videoHTML);
+      $('#videoCarousel').append(videoHTML);
       });
     },
     error: function(error) {
