@@ -241,43 +241,34 @@
 /* POPULAR SECTION  */
 
 .popular {
-  height: auto;
   background-color: var(--color-white);
+  padding-bottom: 50px;
 }
 
 .popular .section-header {
-  padding-top: 87px;
-  padding-bottom: 75px;
+  padding-top: 50px;
+  padding-bottom: 30px;
   color: var(--background-color);
 }
 
-.section .card {
-  border: 0;
-  width: 16rem;
-}
-
-.popular .card {
-  padding-bottom: 87px;
-}
-
-.section .card-img-overlay {
+.popular .card-img-overlay {
   /* top: 25px; */
   top: 5%;
 }
-.section .card-title {
+.popular .card-title {
   font-size: 16px;
   line-height: 20px;
   color: var(--background-color);
 }
 
-.section .card-text {
+.popular .card-text {
   font-size: 14px;
   line-height: 24px;
 }
 
 .popular .carousel-control-prev,
 .popular .carousel-control-next {
-  width: 60px;
+  width: 40px;
 }
 
 .popular .carousel-control-prev.arrow-left {

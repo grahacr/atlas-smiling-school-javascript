@@ -41,6 +41,7 @@ function getQuotes() {
 
         data.forEach(function(video, index) {
           let activeVideo = index === 0 ? 'active' : '';
+          let subTitle = video['sub-title'] || '';
           let starHTML = '';
           for (let i = 0; i < video.star; i++) {
             starHTML += `<img src="images/star_on.png" alt="star rating" width="15px">`
@@ -50,26 +51,15 @@ function getQuotes() {
             <div class="row align-items-center mx-auto">
               <div class="col-12 col-sm-6 col-md-6 col-lg-3 d-flex justify-content-center justify-content-md-end justify-content-lg-center">
                 <div class="card">
-                <img
-                  src="${video.thumb_url}"
-                  class="card-img-top"
-                  alt="Video thumbnail"/>
+                <img src="${video.thumb_url}" class="card-img-top" alt="Video thumbnail"/>
                 <div class="card-img-overlay text-center">
-                <img
-                  src="images/play.png"
-                  alt="Play"
-                  width="64px"
-                  class="align-self-center play-overlay"/>
+                  <img src="images/play.png" alt="Play" width="64px" class="align-self-center play-overlay"/>
                 </div>
                 <div class="card-body">
                   <h5 class="card-title font-weight-bold">${video.title}</h5>
-                  <p class="card-text text-muted">${video.sub-title}</p>
+                  <p class="card-text text-muted">${subTitle}</p>
                   <div class="creator d-flex align-items-center">
-                    <img
-                      src="${video.author_pic_url}"
-                      alt="Creator of Video"
-                      width="30px"
-                      class="rounded-circle"/>
+                    <img src="${video.author_pic_url}" alt="Creator of Video" width="30px" class="rounded-circle"/>
                     <h6 class="pl-3 m-0 main-color">${video.author}</h6>
                   </div>
                   <div class="info pt-3 d-flex justify-content-between">
