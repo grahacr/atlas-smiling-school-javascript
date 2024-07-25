@@ -26,7 +26,10 @@ function getQuotes() {
           </div>`;
           $('#quoteCarousel').append(quoteHTML);
         });
-      }
+        $('#carouselExampleControls').carousel({
+        interval: false
+      });
+      },
     });
   }
 
@@ -40,12 +43,12 @@ function getQuotes() {
         $('#videoCarousel').empty();
 
         data.forEach(function(video, index) {
-          let activeVideo = index === 0 ? 'active' : '';
           let subTitle = video['sub-title'] || '';
           let starHTML = '';
           for (let i = 0; i < video.star; i++) {
             starHTML += `<img src="images/star_on.png" alt="star rating" width="15px">`
           }
+          let activeVideo = index === 0 ? 'active' : '';
           let videoHTML = `
           <div class="carousel-item ${activeVideo}">
             <div class="row align-items-center mx-auto">
@@ -74,6 +77,7 @@ function getQuotes() {
       </div>`;
       $('#videoCarousel').append(videoHTML);
       });
+      $('#carouselExampleControls2').carousel({ interval: false });
     },
     error: function(error) {
       console.error("Error fetching video data", error);

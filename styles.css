@@ -9,7 +9,7 @@
   --nav-line-height: 2px;
   --pros-padding: 62px;
   --quotes-arrows-pad: 300px;
-  --popular-arrows-x: -6vw;
+  --popular-arrows-x: -4vw;
   --smile-p-margin: 20px;
   --check-color: #82d24f;
 
@@ -246,7 +246,7 @@
 }
 
 .popular .section-header {
-  padding-top: 50px;
+  padding-top: 30px;
   padding-bottom: 30px;
   color: var(--background-color);
 }
@@ -268,7 +268,7 @@
 
 .popular .carousel-control-prev,
 .popular .carousel-control-next {
-  width: 40px;
+  width: 20px;
 }
 
 .popular .carousel-control-prev.arrow-left {
@@ -283,7 +283,7 @@
   :root {
     --popular-arrows-x: -4vw;
   }
-  .section .card {
+  .popular .card {
     width: 19vw;
   }
 }
@@ -292,11 +292,11 @@
   :root {
     --popular-arrows-x: -3vw;
   }
-  .section .card-img-overlay {
+  .popular .card-img-overlay {
     /* top: 25px; */
     top: 4%;
   }
-  .section .card-img-overlay img {
+  .popular .card-img-overlay img {
     width: 35%;
   }
 }
@@ -306,13 +306,13 @@
     --popular-arrows-x: -3vw;
   }
 
-  .section .card {
+  .popular .card {
     width: 16rem;
   }
-  .section .card-img-overlay img {
+  .popular .card-img-overlay img {
     width: 30%;
   }
-  .section .card-img-overlay {
+  .popular .card-img-overlay {
     /* top: 25px; */
     top: 5%;
   }
@@ -320,21 +320,21 @@
 
 @media screen and (max-width: 767px) {
   :root {
-    --popular-arrows-x: -6vw;
+    --popular-arrows-x: -4vw;
   }
-  .section .card {
+  .popular .card {
     width: 16rem;
   }
 }
 
 @media screen and (max-width: 575px) {
   :root {
-    --popular-arrows-x: -15px;
+    --popular-arrows-x: -6px;
   }
-  .section .card-img-overlay img {
+  .popular .card-img-overlay img {
     width: 30%;
   }
-  .section .card-img-overlay {
+  .popular .card-img-overlay {
     /* top: 25px; */
     top: 5%;
   }
