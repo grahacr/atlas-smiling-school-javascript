@@ -1,5 +1,6 @@
 let quoteLoading = false;
 let videoLoading = false;
+let courseLoading = false;
 
 function showLoader(elementID) {
   $(elementID).css('animation', 'none');
@@ -105,6 +106,33 @@ function getQuotes() {
     },
    });
   }
+
+  function getCourses(){
+    courseLoading = true;
+    showLoader('.loader');
+
+    $.ajax({
+      url: 'https://smileschool-api.hbtn.info/courses',
+      method: 'GET',
+      success: function(data) {
+        setTimeout(function() {
+          hideLoader('.course-loader');
+        }, 500);
+        
+        const searchValue = $('#q').val();
+        const topicValue = $('#topic').val();
+        const sortValue = $('#sort').val();
+        
+        $('#topics').empty();
+        data.forEach(topic => {
+          $('#topics').append($('<option></option>').val(topic.id))
+        })
+      
+      }
+    });
+  }
+
+
 $(document).ready(function() {
   getQuotes();
   getPopularVideos();
