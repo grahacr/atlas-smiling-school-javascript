@@ -1,12 +1,21 @@
+let quoteLoading = false;
+let videoLoading = false;
+
+function showLoader(elementID) {
+  $(elementID).css('animation', 'none');
+}
+
+function hideLoader(elementID) {
+  $(elementID).removeClass('d-block');
+}
+
 function getQuotes() {
-  $('.loader').addClass('d-block');
+  quoteLoading = true;
+  showLoader('.loader');
   $.ajax({
     url: 'https://smileschool-api.hbtn.info/quotes',
     method: 'GET',
     success: function(data) {
-      $('.loader').removeClass('d-block');
-      $('#quoteCarousel').empty();
-
       data.forEach(function(quote, index) {
         let activeQuote = index === 0 ? 'active' : '';
         let quoteHTML = `
@@ -26,6 +35,7 @@ function getQuotes() {
           </div>`;
           $('#quoteCarousel').append(quoteHTML);
         });
+        hideLoader('.loader');
         $('#carouselExampleControls').carousel({
         interval: false
       });
@@ -34,14 +44,15 @@ function getQuotes() {
   }
 
   function getPopularVideos() {
-    $('.video-loader').addClass('d-block');
+    videoLoading = true;
+    showLoader('.video-loader');
     $.ajax({
       url: 'https://smileschool-api.hbtn.info/popular-tutorials',
       method: 'GET',
       success: function(data) {
-        $('.video-loader').removeClass('d-block');
-        $('#videoCarousel').empty();
-
+        setTimeout(function() {
+          hideLoader('.video-loader');
+        }, 500);
         const carouselItems = 4;
         let carouselIndex = 0;
 
@@ -92,8 +103,8 @@ function getQuotes() {
       }
       $('#carouselExampleControls2').carousel({ interval: false });
     },
-  });
-}
+   });
+  }
 $(document).ready(function() {
   getQuotes();
   getPopularVideos();
