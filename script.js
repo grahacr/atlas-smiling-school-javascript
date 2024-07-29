@@ -42,19 +42,28 @@ function getQuotes() {
         $('.video-loader').removeClass('d-block');
         $('#videoCarousel').empty();
 
-        data.forEach(function(video, index) {
-          let subTitle = video['sub-title'] || '';
-          let starHTML = '';
-          for (let i = 0; i < video.star; i++) {
-            starHTML += `<img src="images/star_on.png" alt="star rating" width="15px">`
+        const carouselItems = 4;
+        let carouselIndex = 0;
+
+        while (carouselIndex < data.length) {
+          let activeClass = carouselIndex === 0 ? 'active' : '';
+          let carouselItemHTML = `
+          <div class="carousel-item ${activeClass}">
+            <div class="row">
+          `;
+
+          for (let i = 0; i < carouselItems && carouselIndex < data.length; i++, carouselIndex++) {
+            const video = data[carouselIndex];
+            const subTitle = video['sub-title'] || '';
+            let starHTML = '';
+            for (let j = 0; j < video.star; j++) {
+              starHTML += `<img src="images/star_on.png" alt="star rating" width="15px">`;
           }
-          let activeVideo = index === 0 ? 'active' : '';
-          let videoHTML = `
-          <div class="carousel-item ${activeVideo}">
-            <div class="row align-items-center mx-auto">
-              <div class="col-12 col-sm-6 col-md-6 col-lg-3 d-flex justify-content-center justify-content-md-end justify-content-lg-center">
-                <div class="card">
-                <img src="${video.thumb_url}" class="card-img-top" alt="Video thumbnail"/>
+          
+          carouselItemHTML += `
+          <div class="col-12 col-sm-6 col-md-3 mb-4">
+            <div class="card">
+              <img src="${video.thumb_url}" class="card-img-top" alt="Video thumbnail"/>
                 <div class="card-img-overlay text-center">
                   <img src="images/play.png" alt="Play" width="64px" class="align-self-center play-overlay"/>
                 </div>
@@ -73,15 +82,16 @@ function getQuotes() {
               </div>
             </div>
           </div>
+          `;
+        }
+        carouselItemHTML += `
         </div>
-      </div>`;
-      $('#videoCarousel').append(videoHTML);
-      });
+          </div>
+          `;
+        $('#videoCarousel').append(carouselItemHTML);
+      }
       $('#carouselExampleControls2').carousel({ interval: false });
     },
-    error: function(error) {
-      console.error("Error fetching video data", error);
-    }
   });
 }
 $(document).ready(function() {

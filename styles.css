@@ -251,10 +251,20 @@
   color: var(--background-color);
 }
 
+.popular .carousel-item {
+  padding: 0 15px;
+}
+
 .popular .card-img-overlay {
   /* top: 25px; */
   top: 5%;
 }
+
+.popular .card {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
 .popular .card-title {
   font-size: 16px;
   line-height: 20px;
@@ -268,7 +278,8 @@
 
 .popular .carousel-control-prev,
 .popular .carousel-control-next {
-  width: 20px;
+  width: 40px;
+  height: 40px;
 }
 
 .popular .carousel-control-prev.arrow-left {
