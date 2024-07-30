@@ -1,14 +1,25 @@
+// loader variables //
 let quoteLoading = false;
 let videoLoading = false;
 let courseLoading = false;
+let priceLoading = false;
 
+// loader functions //
 function showLoader(elementID) {
-  $(elementID).css('animation', 'none');
+  $(elementID).addClass('d-block');
 }
 
 function hideLoader(elementID) {
   $(elementID).removeClass('d-block');
 }
+
+// simulated delay to check loader //
+
+function simulateDelay(callback, delay = 2000) {
+  setTimeout(callback, delay);
+}
+
+// quote section function //
 
 function getQuotes() {
   quoteLoading = true;
@@ -17,6 +28,10 @@ function getQuotes() {
     url: 'https://smileschool-api.hbtn.info/quotes',
     method: 'GET',
     success: function(data) {
+      console.log('quotes data:', data);
+      if (Array.isArray(data)) {
+        $('#carouselExampleControls .carousel-inner').empty();
+
       data.forEach(function(quote, index) {
         let activeQuote = index === 0 ? 'active' : '';
         let quoteHTML = `
@@ -34,26 +49,35 @@ function getQuotes() {
               </div>
             </div>
           </div>`;
-          $('#quoteCarousel').append(quoteHTML);
+          $('#carouselExampleControls .carousel-inner').append(quoteHTML);
         });
-        hideLoader('.loader');
-        $('#carouselExampleControls').carousel({
-        interval: false
-      });
-      },
-    });
-  }
+        $('#carouselExampleControls').carousel({ interval: false });
+
+        simulateDelay(() => {
+          hideLoader('#loader');
+        });
+      } else {
+        console.error('expected array', data);
+      }
+      hideLoader('#loader');
+    },
+  });
+}
+
+// popular tutorials function //
 
   function getPopularVideos() {
     videoLoading = true;
-    showLoader('.video-loader');
+    showLoader('#video-loader');
     $.ajax({
       url: 'https://smileschool-api.hbtn.info/popular-tutorials',
       method: 'GET',
       success: function(data) {
-        setTimeout(function() {
-          hideLoader('.video-loader');
-        }, 500);
+        console.log(data);
+
+        if (Array.isArray(data)) {
+          $('#videoCarousel').empty();
+
         const carouselItems = 4;
         let carouselIndex = 0;
 
@@ -93,8 +117,7 @@ function getQuotes() {
                 </div>
               </div>
             </div>
-          </div>
-          `;
+          </div>`;
         }
         carouselItemHTML += `
         </div>
@@ -103,11 +126,58 @@ function getQuotes() {
         $('#videoCarousel').append(carouselItemHTML);
       }
       $('#carouselExampleControls2').carousel({ interval: false });
-    },
-   });
-  }
+    } else {
+      console.error('expected array', data);
+    }
+    hideLoader('#video-loader');
+   },
+  });
+}
 
-  function getCourses(){
+// pricing dynamic loading //
+  function getPricing() {
+    priceLoading = true;
+    showLoader('#pricing-loader');
+    
+    $.ajax({
+    url: 'https://smileschool-api.hbtn.info/quotes',
+    method: 'GET',
+    success: function(data) {
+      console.log('pricing data:', data);
+
+      if (Array.isArray(data)) {
+        $('#pricingCarousel').empty();
+
+        data.forEach(function(quote, index) {
+        let activeClass = index === 0 ? 'active' : '';
+        let priceHTML = `
+        <div class="carousel-item ${activeClass}">
+          <div class="row m-4 align-items-center justify-content-center">
+            <div class="col-12 col-sm-2 col-lg-2 text-center px-4">
+              <img src="${quote.pic_url}" class="d-block align-self-center" alt="Quote person">
+              </div>
+              <div class="col-12 col-sm-7 col-lg-9 px-4">
+                <div class="quote-text">
+                  <p class="text-white">${quote.text}</p>
+                  <h4 class="text-white">${quote.name}</h4>
+                  <span class="text-white">${quote.title}</span>
+                </div>
+              </div>
+            </div>
+          </div>`;
+          $('#pricingCarousel').append(priceHTML);
+        });
+        $('#carouselExampleControls').carousel({ interval: false });
+      } else {
+        console.error('expected array', data);
+      }
+      hideLoader('#pricing-loader');
+    },
+  });
+}
+
+  // courses page functions //
+  function getCourses() {
     courseLoading = true;
     showLoader('.loader');
 
@@ -136,4 +206,5 @@ function getQuotes() {
 $(document).ready(function() {
   getQuotes();
   getPopularVideos();
+  getPricing();
 });
