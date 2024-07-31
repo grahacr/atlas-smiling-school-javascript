@@ -176,35 +176,129 @@ function getQuotes() {
   });
 }
 
-  // courses page functions //
+// courses page functions //
+
+// event listeners for sorting //
+
+$('#keywords').on('input', function() {
+  getCourses();
+})
+
+$('#topics').on('change', function() {
+  getCourses();
+})
+
+
+$('#sort').on('change', function() {
+  getCourses();
+}); 
+
+function createFilters() {
+  $.ajax({
+    url: 'https://smileschool-api.hbtn.info/courses',
+    method: 'GET',
+    success: function(response) {
+      const topics = response.topics;
+      const sorts = response.sorts;
+      const currentSearch = response.q;
+      const currentTopic = response.topic;
+      const currentSort = response.sort;
+
+      const topicList = $('#topic');
+      topicList.empty();
+      topicList.append(`<option value="all">All Topics</option>`);
+      topics.forEach(topic => {
+        topicList.append(`<option value="${topic}">${topic}</option>`);
+      });
+      topicList.val(currentTopic);
+      
+      const sortList = $('#sort');
+      sortList.empty();
+      sorts.forEach(sort => {
+        sortList.append(`<option value=${sort}">${sort}</option>`);
+      });
+      sortList.val(currentSort);
+      
+      $('#search').val(currentSearch);
+    },
+  });
+}
+
   function getCourses() {
-    courseLoading = true;
-    showLoader('.loader');
+    const searchValue = $('#search').val();
+    const topicValue = $('#topic').val();
+    const sortValue = $('#sort').val();
+
+    showLoader('.course-loader');
 
     $.ajax({
       url: 'https://smileschool-api.hbtn.info/courses',
       method: 'GET',
-      success: function(data) {
-        setTimeout(function() {
-          hideLoader('.course-loader');
-        }, 500);
-        
-        const searchValue = $('#q').val();
-        const topicValue = $('#topic').val();
-        const sortValue = $('#sort').val();
-        
-        $('#topics').empty();
-        data.forEach(topic => {
-          $('#topics').append($('<option></option>').val(topic.id))
-        })
-      
+      data: {
+        q: searchValue,
+        topic: topicValue,
+        sort: sortValue
+      },
+      success: function(response) {
+        const courses = response.courses;
+        const filteredCourses = filterCourses(courses, searchValue, topicValue);
+        const sortedCourses = sortCourses(filteredCourses, sortValue);
+        displayCourses(sortedCourses);
+        hideLoader('.course-loader');
+      },
+    });
+  }
+  function filterCourses(courses, searchValue, topicValue) {
+    return courses.filter(course => {
+      const matchSearch = course.title.includes(searchValue) || course['sub-title'].includes(searchValue);
+      const matchTopic = topicValue === 'all' || course.topic === topicValue;
+      return matchSearch && matchTopic;
+    });
+  }
+
+  function sortCourses(courses, sortValue) {
+    return courses.sort((a, b) => {
+      switch (sortValue) {
+        case 'most_popular':
+          return b.views - a.views;
+        case 'most_recent':
+          return b.published_at - a.published_at;
+        case 'most_viewed':
+          return b.views - a.views;
+        default:
+          return 0;
       }
     });
   }
 
+  function displayCourses(courses) {
+    const courseList = $('#course-list');
+    courseList.empty();
+
+    courses.forEach(course => {
+      const stars = '<img src="images/star_on.png" alt="star rating" width="15px">'.repeat(course.star);
+      const courseHTML = `
+      <div class="course-item col-12 col-sm-4 col-lg-3 d-flex justify-content-center">
+        <img src="${course.thumb_url}" class="course-thumbnail" alt="course thumbnail">
+        <div class="course-info">
+          <h3 class="course-title">${course.title}</h3>
+          <p class="course-subtitle">${course['sub-title']}</p>
+          <div class="course-author">
+            <img src=${course.author_pic_url}" alt="author picture" class="author-pic">
+            <span>${course.author}</span>
+          </div>
+          <div class="course-rating">${stars}</div>
+          <div class="course-duration">${course.duration}</div>
+        </div>
+      </div>
+      `;
+      courseList.append(courseHTML);
+    });
+  }
 
 $(document).ready(function() {
   getQuotes();
   getPopularVideos();
   getPricing();
+  getCourses();
 });
