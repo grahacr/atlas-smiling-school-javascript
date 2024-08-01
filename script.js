@@ -180,95 +180,86 @@ function getQuotes() {
 
 // event listeners for sorting //
 
-$('#keywords').on('input', function() {
+$(document).ready(function() {
+
   getCourses();
-})
-
-$('#topics').on('change', function() {
-  getCourses();
-})
-
-
-$('#sort').on('change', function() {
-  getCourses();
-}); 
-
-function createFilters() {
-  $.ajax({
-    url: 'https://smileschool-api.hbtn.info/courses',
-    method: 'GET',
-    success: function(response) {
-      const topics = response.topics;
-      const sorts = response.sorts;
-      const currentSearch = response.q;
-      const currentTopic = response.topic;
-      const currentSort = response.sort;
-
-      const topicList = $('#topic');
-      topicList.empty();
-      topicList.append(`<option value="all">All Topics</option>`);
-      topics.forEach(topic => {
-        topicList.append(`<option value="${topic}">${topic}</option>`);
-      });
-      topicList.val(currentTopic);
-      
-      const sortList = $('#sort');
-      sortList.empty();
-      sorts.forEach(sort => {
-        sortList.append(`<option value=${sort}">${sort}</option>`);
-      });
-      sortList.val(currentSort);
-      
-      $('#search').val(currentSearch);
-    },
+  
+  $('#keywords input').on('input', function() {
+    getCourses();
   });
-}
+  
+  
+  $('#topic .dropdown-menu').on('click', 'a', function(event) {
+    event.preventDefault();
+    const topicValue = $(this).data('value');
+    $('#topic .dropdown-toggle span').text($(this).text()).data('value', topicValue);
+    getCourses();
+  });
+  
 
-  function getCourses() {
-    const searchValue = $('#search').val();
-    const topicValue = $('#topic').val();
-    const sortValue = $('#sort').val();
+  $('#sort .dropdown-menu').on('click', 'a', function(event) {
+    event.preventDefault();
+    const sortValue = $(this).data('value');
+    $('#sort .dropdown-toggle span').text($(this).text()).data('value', sortValue);
+    getCourses();
+  });
+});
+
+function getCourses() {
+  const searchValue = $('#keywords input').val();
+  const topicValue = $('#topic .dropdown-toggle span').data('value') || 'all';
+  const sortValue = $('#sort .dropdown-toggle span').data('value') || 'most_popular';
 
     showLoader('.course-loader');
+
+    let queryParameters = {};
+    if (searchValue) queryParameters.q = searchValue;
+    if (topicValue && topicValue !== 'all') queryParameters.topic = topicValue;
+    if (sortValue) queryParameters.sort = sortValue;
 
     $.ajax({
       url: 'https://smileschool-api.hbtn.info/courses',
       method: 'GET',
-      data: {
-        q: searchValue,
-        topic: topicValue,
-        sort: sortValue
-      },
+      data: queryParameters,
       success: function(response) {
         const courses = response.courses;
-        const filteredCourses = filterCourses(courses, searchValue, topicValue);
-        const sortedCourses = sortCourses(filteredCourses, sortValue);
-        displayCourses(sortedCourses);
+        const topics = response.topics;
+        const sorts = response.sorts;
+
+        dynamicDropdown(topics, sorts);
+        displayCourses(courses);
         hideLoader('.course-loader');
       },
     });
   }
-  function filterCourses(courses, searchValue, topicValue) {
-    return courses.filter(course => {
-      const matchSearch = course.title.includes(searchValue) || course['sub-title'].includes(searchValue);
-      const matchTopic = topicValue === 'all' || course.topic === topicValue;
-      return matchSearch && matchTopic;
+
+  function dynamicDropdown(topics, sorts) {
+    const topicDropdown = $('#topic .dropdown-menu');
+    const sortDropdown = $('#sort .dropdown-menu');
+
+    topicDropdown.empty();
+    sortDropdown.empty();
+
+    topicDropdown.append('<a class="dropdown-item" href="#" data-value="all">All Topics</a>')
+    topics.forEach(topic => {
+      topicDropdown.append(`<a class="dropdown-item" href="#" data-value="${topic}">${topic}</a>`)
+    });
+
+    sorts.forEach(sort => {
+      sortDropdown.append(`<a class="dropdown-item" href="#" data-value="${sort}">${formatSortValue(sort)}</a>`)
     });
   }
-
-  function sortCourses(courses, sortValue) {
-    return courses.sort((a, b) => {
-      switch (sortValue) {
-        case 'most_popular':
-          return b.views - a.views;
-        case 'most_recent':
-          return b.published_at - a.published_at;
-        case 'most_viewed':
-          return b.views - a.views;
-        default:
-          return 0;
-      }
-    });
+  function formatSortValue(value) {
+    switch (value) {
+      case 'most_popular':
+        return 'Most Popular';
+      case 'most_recent':
+        return 'Most Recent';
+      case 'most_viewed':
+        return 'Most Viewed';
+      default:
+        return value;
+    }
   }
 
   function displayCourses(courses) {
@@ -296,9 +287,4 @@ function createFilters() {
     });
   }
 
-$(document).ready(function() {
-  getQuotes();
-  getPopularVideos();
-  getPricing();
-  getCourses();
-});
+

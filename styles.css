@@ -818,6 +818,7 @@
 
 .search .dropdown-menu {
   width: 100%;
+  display: block;
 }
 
 .search .dropdown-menu .dropdown-item:hover {
@@ -875,4 +876,12 @@
   .results .card {
     width: 90vw;
   }
+}
+
+.d-block {
+  display: block;
+}
+
+.d-none {
+  display: none;
 }
