@@ -269,20 +269,21 @@ function getCourses() {
     courses.forEach(course => {
       const stars = '<img src="images/star_on.png" alt="star rating" width="15px">'.repeat(course.star);
       const courseHTML = `
-      <div class="course-item col-12 col-sm-4 col-lg-3 d-flex justify-content-center">
-        <img src="${course.thumb_url}" class="course-thumbnail" alt="course thumbnail">
-        <div class="course-info">
-          <h3 class="course-title">${course.title}</h3>
-          <p class="course-subtitle">${course['sub-title']}</p>
-          <div class="course-author">
-            <img src=${course.author_pic_url}" alt="author picture" class="author-pic">
-            <span>${course.author}</span>
+      <div class="course-item col-12 col-sm-6 col-md-4 col-lg-3 mb-4 d-flex justify-content-center">
+        <div class="card">
+          <img src="${course.thumb_url}" class="card-img-top course-thumbnail" alt="course thumbnail">
+          <div class="card-body">
+            <h3 class="card-title">${course.title}</h3>
+            <p class="card-text">${course['sub-title']}</p>
+            <div class="d-flex align-items-center mb-2">
+              <img src=${course.author_pic_url}" alt="author picture" class="rounded-circle">
+              <span>${course.author}</span>
+            </div>
+            <div class="d-flex mb-2">${stars}</div>
+              <p class="card-text">${course.duration}</p>
           </div>
-          <div class="course-rating">${stars}</div>
-          <div class="course-duration">${course.duration}</div>
         </div>
-      </div>
-      `;
+        `;
       courseList.append(courseHTML);
     });
   }
