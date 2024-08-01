@@ -183,6 +183,9 @@ function getQuotes() {
 $(document).ready(function() {
 
   getCourses();
+  getQuotes();
+  getPopularVideos();
+  getPricing();
   
   $('#keywords input').on('input', function() {
     getCourses();
@@ -276,7 +279,7 @@ function getCourses() {
             <h3 class="card-title">${course.title}</h3>
             <p class="card-text">${course['sub-title']}</p>
             <div class="d-flex align-items-center mb-2">
-              <img src=${course.author_pic_url}" alt="author picture" class="rounded-circle">
+              <img src=${course.author_pic_url}" alt="author picture">
               <span>${course.author}</span>
             </div>
             <div class="d-flex mb-2">${stars}</div>
@@ -287,5 +290,3 @@ function getCourses() {
       courseList.append(courseHTML);
     });
   }
-
-
